@@ -1,0 +1,24 @@
+#!/bin/bash
+n=`echo $1 | tr '[:lower:]' '[:upper:]'`
+fc=`echo $2 | tr '[:lower:]' '[:upper:]'`
+[ "$fc" == "F" ] || [ "$fc" == "C" ] || n=`echo $2 | tr '[:lower:]' '[:upper:]'`
+[ "$fc" == "F" ] || [ "$fc" == "C" ] || fc=`echo $1 | tr '[:lower:]' '[:upper:]'`
+[ "$fc" == "F" ] && a=$(($n-32)) && b=$((a*5)) && c=$((b/9)) && echo $c C && echo $c > ~/.prog/data/C
+[ "$fc" == "C" ] && a=$(($n*9)) && b=$((a/5)) && c=$((b+32)) && echo $c F && echo $c > ~/.prog/data/F
+if [ "$c" == "" ]
+then
+l=513
+[ "${1:0:1}" == "F" ] && a=$((${1:1:512}-32)) && b=$((a*5)) && c=$((b/9)) && echo $c C && echo $c > ~/.prog/data/C
+[ "${1:0:1}" == "C" ] && a=$((${1:1:512}*9)) b=$((a/5)) && c=$((b+32)) && echo $c F && echo $c > ~/.prog/data/F
+[ "${1:0:1}" == "f" ] && a=$((${1:1:512}-32)) && b=$((a*5)) && c=$((b/9)) && echo $c C && echo $c > ~/.prog/data/C
+[ "${1:0:1}" == "c" ] && a=$((${1:1:512}*9)) b=$((a/5)) && c=$((b+32)) && echo $c F && echo $c > ~/.prog/data/F
+until [ "$l" == "0" ]
+do
+l=$((l-1))
+[ "${1:$l:1}" == "F" ] && a=$((${1:0:$l}-32)) && b=$((a*5)) && c=$((b/9)) && echo $c C && echo $c > ~/.prog/data/C
+[ "${1:$l:1}" == "C" ] && a=$((${1:0:$l}*9)) b=$((a/5)) && c=$((b+32)) && echo $c F && echo $c > ~/.prog/data/F
+[ "${1:$l:1}" == "f" ] && a=$((${1:0:$l}-32)) && b=$((a*5)) && c=$((b/9)) && echo $c C && echo $c > ~/.prog/data/C
+[ "${1:$l:1}" == "c" ] && a=$((${1:0:$l}*9)) b=$((a/5)) && c=$((b+32)) && echo $c F && echo $c > ~/.prog/data/F
+[ "$c" == "" ] || l=0
+done
+fi
